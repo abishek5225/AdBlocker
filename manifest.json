@@ -8,7 +8,14 @@
         "default_title": "LinkedIn AdBlocker"
     },
     "permissions": [
-        
-    ]
+        "tabs",
+        "webNavigation",
+        "https://www.Linkedin.com"
+    ],
+    "background":{
+        "scripts": [
+            "extension.js"
+        ]
+    }
 
 }
