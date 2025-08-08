@@ -12,6 +12,12 @@ chrome.webNavigation.onCommitted.addListener(function (tab){
                let parsedUrl=url.replace("https://","")
                .replace("http://","")
                .replace("www.","") 
+
+               //removing path and queries because we only want base domain
+               let domain=parsedUrl.slice(0,parsedUrl.indexOf('/') == -1? parsedUrl.length : parsedUrl.indexOf('/'))
+               .slice(0, parsedUrl.indexOf('?') == -1 ? parsedUrl.length : parsedUrl.indexOf('?'))
+
+               
             }
         )
     }
