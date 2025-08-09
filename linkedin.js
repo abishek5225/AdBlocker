@@ -18,3 +18,8 @@ function removeAds(){
         }
     }
 }
+removeAds();
+
+setInterval(function(){
+    removeAds();
+},100)
