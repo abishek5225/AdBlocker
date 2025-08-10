@@ -1,42 +1,33 @@
-chrome.webNavigation.onCommitted.addListener(function (tab){
-    //prevent script from running when other frames load
-    if(tab.frameId == 0){
-        chrome.tabs.query({
-            activate:true,
-            lastFocusedWindow: true,
-        },
-        (tabs)=>{
-               //get the url of webpage
-               let url= tabs[0].url;
-               //remove unnecessary protocol definitions and www subdomain from the URL
-               let parsedUrl=url.replace("https://","")
-               .replace("http://","")
-               .replace("www.","") 
+chrome.webNavigation.onCommitted.addListener((details) => {
+  // prevent script from running when other frames load
+  if (details.frameId === 0) {
+    chrome.tabs.query(
+      { active: true, lastFocusedWindow: true },
+      (tabs) => {
+        if (tabs.length === 0) return;
 
-               //removing path and queries because we only want base domain
-               let domain=parsedUrl.slice(0,parsedUrl.indexOf('/') == -1? parsedUrl.length : parsedUrl.indexOf('/'))
-               .slice(0, parsedUrl.indexOf('?') == -1 ? parsedUrl.length : parsedUrl.indexOf('?'))
+        let url = tabs[0].url;
 
-               try{
-                if(domain.length<1 || domain === null || domain===undefined){
-                    return;
-                }else if(domain == "linkedin.com"){
-                    runLinkedinScript();
-                    return;
-                }
-               }catch(err){
-                throw(err);
-               }
-               
-            }
-        )
-    }
-})
+        let parsedUrl = url
+          .replace("https://", "")
+          .replace("http://", "")
+          .replace("www.", "");
 
-function runLinkedinScript(){
-    //inject from file into the webpage
-    chrome.tabs.executeScript({
-        file: 'linkedin.js'
-    })
-    return true;
+        let domain = parsedUrl.split("/")[0].split("?")[0];
+
+        if (!domain) return;
+
+        if (domain === "linkedin.com") {
+          runLinkedinScript(tabs[0].id);
+        }
+      }
+    );
+  }
+});
+
+function runLinkedinScript(tabId) {
+  chrome.scripting.executeScript({
+    target: { tabId: tabId },
+    files: ["linkedin.js"],
+  });
 }
