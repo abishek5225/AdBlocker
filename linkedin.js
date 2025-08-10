@@ -4,7 +4,7 @@ function removeAds(){
     for(let i=0; i< spans.length;i++){
         if(spans[i].innerHTML === "Promoted"){
 
-            let card = spans[i].closest(".update-components-actor__meta");
+            let card = spans[i].closest(".fie-impression-container");
 
             if(card === null){
                 let j=0;
