@@ -5,7 +5,7 @@ chrome.webNavigation.onCommitted.addListener(function (tab){
             activate:true,
             lastFocusedWindow: true,
         },
-        tabs=>{
+        (tabs)=>{
                //get the url of webpage
                let url= tabs[0].url;
                //remove unnecessary protocol definitions and www subdomain from the URL
